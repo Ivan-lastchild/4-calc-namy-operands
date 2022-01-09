@@ -1,75 +1,81 @@
-let main = function(action, countOfOperands, calculate, result) {
-    action = getAction();
-    countOfOperands = getCountOfOperands();
-    calculate = calcOfOperands(countOfOperands);
-    result = calc(action,calculate);
-
-
-    console.log(result);
-};
-
 main();
 
-function getAction(action) {
+function main() {
+    const doAction = getAction(),
+            takeOperands = getCountOfOperations(),
+            operands = getOpernads(takeOperands),
+            result = calculation(operands, doAction),
+            display = showTheResult(result, operands, doAction);
+}
+
+function getAction(){
+    let action;
 
     do {
-        action = prompt('Your action?');
-    } while (!(action == "+" || action == "-" || action == "*" || action == "/" ));
+        action = prompt("Выберите операцию");
+    } while (!validAction(action));
 
     return action;
 }
 
-function getCountOfOperands(count) {
-    
-    count;
+function validAction(action) {
+    return action == "+" || action == "-" || action == "*" || action == "/";
+}
+
+function getCountOfOperations() {
+    let countOfOperation;
 
     do {
-        count = +prompt('Count of itterations?');
-    } while ((count > 5 || count < 1) || isNaN(count) == true);
+        countOfOperation = +prompt('Введите количество операндов');
+    } while (validOperands(countOfOperation));
 
-    return count;
+    return countOfOperation;
 }
 
-function calcOfOperands(countItteration) {
-    let arr = [];
+function validOperands(count) {
+    return count > 5 || count < 1 || isNaN(count);
+}
 
-    for(let i = 0; i < countItteration; i++ ){
-        let operands = +prompt('Write the number');
-        arr.push(operands);
+function getOpernads(countOfOperands){
+    let boxOfOperands = [];
+
+    for(let i = 1; i <= countOfOperands; i++){
+        
+        let operands;
+
+        do {
+            operands = +prompt(`Введите ${i} число`);
+        } while (isNaN(operands));
+        boxOfOperands.push(operands);
     }
 
-    return arr;
+    return boxOfOperands;
 }
 
+function calculation (boxOfOperands, action) {
+    let score;
 
-function calc(action, arr) {
-    if(action == "+"){
-        let result = 0;
-        for (let elem of arr) {
-            result +=elem;
-        }
-        return result;
-
-    }else if (action =="-"){
-        let result = 0;
-        for (let elem of arr) {
-            result -=elem;
-        }
-        return result;
-
+    if(action == '+'){
+        score = boxOfOperands.reduce((acm, currentElem)=>{
+            return acm + currentElem;
+        });
+    } else if (action == "-"){
+        score = boxOfOperands.reduce((acm, currentElem)=>{
+            return acm - currentElem;
+        });
     } else if (action == "*"){
-        let result = 1;
-        for (let elem of arr) {
-            result *= elem;
-        }
-        return result;
-
+        score = boxOfOperands.reduce((acm, currentElem)=>{
+            return acm * currentElem;
+        });
     } else if (action == "/"){
-        let result = 1;
-        for (let elem of arr) {
-            result /= elem;
-        }
-        return result;
+        score = boxOfOperands.reduce((acm, currentElem)=>{
+            return acm / currentElem;
+        });
     }
-    
+
+    return score;
+}
+
+function showTheResult(result, boxOfOperands, action) {
+    alert(`The result of calculation is ${boxOfOperands.join(` ${action} `)} = ${result}`);
 }
